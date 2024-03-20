@@ -33,15 +33,7 @@ lcd.lcd_clear()
 
 lcd.lcd_display_string("Motor   :OFF" ,2,0)
           
-#Get the analog input values
-def moistureValue():
-    bus.write_byte(0x4b,0x84)# A0
-    value = bus.read_byte(0x4b)
-    value = (value/255) * 100
-    value = (value - 100) * -1
-    
-    value = int(value)
-    lcd.lcd_display_string("Moisture:" + str(value) + "%  " ,1,0)
+
       
     
 while True:
