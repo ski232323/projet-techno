@@ -5,6 +5,7 @@ import I2C_LCD_driver
 from time import sleep
 from smbus import SMBus
 import RPi.GPIO as GPIO
+import datetime
 
 bus = SMBus(1)
 
@@ -13,7 +14,7 @@ relay = 27
 motorstatus = True
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+
 
 # Set the button pin as Input pin
 GPIO.setup(button,GPIO.IN,pull_up_down=GPIO.PUD_UP)
@@ -29,7 +30,7 @@ lcd = I2C_LCD_driver.lcd()
 # Starting text
 lcd.lcd_display_string("System Loading",1,1)
 for a in range (0,16):
-    lcd.lcd_display_string(".",2,a)
+    lcd.lcd_display_string(".",2,a+datetime.now())
     sleep(0.1)
 lcd.lcd_clear()
 
@@ -60,3 +61,24 @@ while True:
             lcd.lcd_display_string("Motor   :OFF" ,2,0)
             sleep(0.5)
             motorstatus = True
+
+import smtplib, ssl
+
+# on rentre les renseignements pris sur le site du fournisseur
+smtp_address = 'smtp.gmail.com'
+smtp_port = 465
+
+# on rentre les informations sur notre adresse e-mail
+email_address = 'templetonarchibald@gmail.com'
+email_password = 'iloveski235!'
+
+# on rentre les informations sur le destinataire
+email_receiver = 'ulysse.renzetti@outlook.fr'
+
+# on crée la connexion
+context = ssl.create_default_context()
+with smtplib.SMTP_SSL(smtp_address, smtp_port, context=context) as server:
+  # connexion au compte
+  server.login(email_address, email_password)
+  # envoi du mail
+  server.sendmail(email_address, email_receiver, 'la plante est arrosée'+ datetime.now())
